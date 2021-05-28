@@ -1,55 +1,91 @@
 package ru.mail.gasimov.task4.entity;
 
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.mail.gasimov.task4.exception.InformationHandlerException;
 
-import java.util.Objects;
+import java.util.Collection;
 
-public class CustomSymbol extends CustomTextComponent {
+public class CustomSymbol extends TextComponent {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final char character;
+    private final String value;
 
-    public CustomSymbol(char value) {
-        super(CustomTextComponentType.SYMBOL);
-        this.character = value;
+    public CustomSymbol(String value, TextComponentType componentType) {
+        super(componentType);
+        this.value = value;
+    }
+
+    public String getCharacter() {
+        return value;
     }
 
 
     @Override
-    public void add(CustomTextComponent textComponent) {
-        LOGGER.log(Level.INFO, "Cannot add new component to existing leaf");
-    }
+    public void add(TextComponent textComponent)  {
+        String message = "An attempt to add child to symbol";
+        LOGGER.error(message);
+        throw new UnsupportedOperationException();    }
 
     @Override
-    public void remove(CustomTextComponent textComponent) {
-        LOGGER.log(Level.INFO, "Cannot new component to existing leaf");
-    }
+    public void addAll(Collection<? extends TextComponent> items) {
+        String message = "An attempt to add all child to symbols";
+        LOGGER.error(message);
+        throw new UnsupportedOperationException();    }
 
-    public char getCharacter() {
-        return character;
+    @Override
+    public void removeAll(Collection<? extends TextComponent> items) {
+        String message = "An attempt to remove all child from symbols";
+        LOGGER.error(message);
+        throw new UnsupportedOperationException();    }
+
+    @Override
+    public void remove(TextComponent textComponent) {
+        String message = "An attempt to remove child from symbol";
+        LOGGER.error(message);
+        throw new UnsupportedOperationException();    }
+
+    @Override
+    public Collection<TextComponent> getChildrenAsCollection() {
+        String message = "An attempt to get stream of children from symbol";
+        LOGGER.error(message);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(character);
+        int prime = 31;
+        int result = 1;
+
+        result = prime * result + value.hashCode();
+        result = prime * result + getTextComponentType().hashCode();
+
+        return result;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomSymbol that = (CustomSymbol) o;
-        return character == that.character;
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        CustomSymbol symbol = (CustomSymbol) obj;
+        boolean equality = symbol.value != null
+                ? symbol.value.equals(value)
+                : symbol.value == value;
+        equality &= symbol.getTextComponentType() != null
+                ? symbol.getTextComponentType().equals(getTextComponentType())
+                : symbol.getTextComponentType() == getTextComponentType();
+
+        return equality;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("CustomSymbol{");
-        sb.append("character=").append(character);
-        sb.append(", textComponentType=").append(this.getTextComponentType().toString());
-        sb.append('}');
-        return sb.toString();
+        return value;
     }
 }
